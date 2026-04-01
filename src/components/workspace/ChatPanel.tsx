@@ -18,6 +18,7 @@ interface ChatPanelProps {
   messages: ChatMessage[];
   onSendMessage: (message: string) => void;
   isLoading: boolean;
+  userName?: string;
 }
 
 const agentColors: Record<string, string> = {
@@ -26,7 +27,7 @@ const agentColors: Record<string, string> = {
   debugger: "text-agent-debugger",
 };
 
-const ChatPanel = ({ messages, onSendMessage, isLoading }: ChatPanelProps) => {
+const ChatPanel = ({ messages, onSendMessage, isLoading, userName = "User" }: ChatPanelProps) => {
   const [input, setInput] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -59,8 +60,9 @@ const ChatPanel = ({ messages, onSendMessage, isLoading }: ChatPanelProps) => {
           {messages.length === 0 && (
             <div className="text-center py-12">
               <Bot className="h-8 w-8 text-primary/30 mx-auto mb-3" />
-              <p className="text-sm text-muted-foreground">Describe what you want to build</p>
-              <p className="text-xs text-muted-foreground/60 mt-1">The agents will plan, code, and debug it for you</p>
+              <p className="text-sm text-muted-foreground">Hello, {userName}!</p>
+              <p className="text-xs text-muted-foreground/60 mt-1">Describe what you want to build</p>
+              <p className="text-xs text-muted-foreground/60">The agents will plan, code, and debug it for you</p>
             </div>
           )}
           {messages.map(msg => (
@@ -79,6 +81,12 @@ const ChatPanel = ({ messages, onSendMessage, isLoading }: ChatPanelProps) => {
                   <span className={`text-xs font-medium ${agentColors[msg.agent]} block mb-1`}>
                     {msg.agent.charAt(0).toUpperCase() + msg.agent.slice(1)} Agent
                   </span>
+                )}
+                {msg.role === "user" && (
+                  <div className="text-xs font-medium text-primary/80 mb-1 flex items-center gap-1">
+                    <User className="h-3 w-3" />
+                    {userName}
+                  </div>
                 )}
                 <div className="prose prose-sm prose-invert max-w-none">
                   <ReactMarkdown>{msg.content}</ReactMarkdown>

@@ -6,55 +6,61 @@
 
 @layer base {
   :root {
-    --background: 228 12% 8%;
-    --foreground: 210 20% 92%;
+    /* New IDE color system */
+    --ide-sidebar: 220 22% 8%;
+    --ide-panel: 220 20% 11%;
+    --ide-tab-active: 220 20% 14%;
+    --ide-tab-inactive: 220 20% 10%;
+    --ide-accent-green: 150 70% 50%;
+    --ide-accent-yellow: 45 90% 60%;
+    --ide-accent-red: 0 75% 55%;
+    --ide-accent-blue: 210 90% 60%;
+    --ide-glow: 190 90% 50%;
 
-    --card: 225 14% 11%;
-    --card-foreground: 210 20% 92%;
-
-    --popover: 225 14% 11%;
-    --popover-foreground: 210 20% 92%;
-
-    --primary: 142 72% 50%;
-    --primary-foreground: 228 12% 8%;
-
-    --secondary: 225 14% 16%;
-    --secondary-foreground: 210 20% 82%;
-
-    --muted: 225 12% 14%;
-    --muted-foreground: 215 14% 52%;
-
-    --accent: 262 80% 60%;
-    --accent-foreground: 210 20% 95%;
-
-    --destructive: 0 72% 55%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 225 12% 18%;
-    --input: 225 12% 18%;
-    --ring: 142 72% 50%;
+    /* Base colors (shadcn/ui) */
+    --background: 220 20% 10%;
+    --foreground: 220 10% 90%;
+    --card: 220 20% 12%;
+    --card-foreground: 220 10% 90%;
+    --popover: 220 20% 14%;
+    --popover-foreground: 220 10% 90%;
+    --primary: 190 90% 50%;
+    --primary-foreground: 220 20% 6%;
+    --secondary: 220 20% 16%;
+    --secondary-foreground: 220 10% 80%;
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 55%;
+    --accent: 270 70% 60%;
+    --accent-foreground: 220 10% 95%;
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 190 90% 50%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 228 14% 6%;
-    --sidebar-foreground: 210 20% 82%;
-    --sidebar-primary: 142 72% 50%;
-    --sidebar-primary-foreground: 228 12% 8%;
-    --sidebar-accent: 225 14% 14%;
-    --sidebar-accent-foreground: 210 20% 92%;
-    --sidebar-border: 225 12% 16%;
-    --sidebar-ring: 142 72% 50%;
+    /* Sidebar (if used) */
+    --sidebar-background: var(--ide-sidebar);
+    --sidebar-foreground: 220 10% 80%;
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
+    --sidebar-accent: 220 20% 14%;
+    --sidebar-accent-foreground: 220 10% 90%;
+    --sidebar-border: 220 15% 18%;
+    --sidebar-ring: var(--ring);
 
-    /* Custom tokens */
-    --agent-planner: 199 89% 48%;
-    --agent-coder: 142 72% 50%;
-    --agent-debugger: 32 95% 55%;
-    --agent-error: 0 72% 55%;
-    --panel-header: 225 14% 13%;
-    --panel-border: 225 10% 20%;
-    --terminal-bg: 228 16% 6%;
-    --glow-green: 142 72% 50%;
-    --glow-purple: 262 80% 60%;
+    /* Agent colors (using new accent variants) */
+    --agent-planner: var(--ide-accent-blue);
+    --agent-coder: var(--ide-accent-green);
+    --agent-debugger: var(--ide-accent-yellow);
+    --agent-error: var(--ide-accent-red);
+
+    --panel-header: 220 20% 14%;
+    --panel-border: 220 15% 22%;
+    --terminal-bg: 220 22% 6%;
+    --glow-green: var(--ide-accent-green);
+    --glow-purple: var(--accent);
   }
 }
 
