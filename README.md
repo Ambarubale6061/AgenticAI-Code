@@ -22,24 +22,24 @@
 
 ## 📚 Table of Contents
 
-- [Overview](#overview)
-- [Live Demo](#live-demo)
-- [Tech Stack](#tech-stack)
-- [Architecture](#architecture)
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Supabase Setup](#supabase-setup)
-- [Edge Functions](#edge-functions)
-- [Agent Pipeline](#agent-pipeline)
-- [Execution Engine](#execution-engine)
-- [Agent Memory System](#agent-memory-system)
-- [Version Control](#version-control)
-- [Workspace UI](#workspace-ui)
-- [Authentication & Routing](#authentication--routing)
-- [Testing](#testing)
-- [Deployment](#deployment)
+- Overview
+- Live Demo
+- Tech Stack
+- Architecture
+- Features
+- Project Structure
+- Getting Started
+- Environment Variables
+- Supabase Setup
+- Edge Functions
+- Agent Pipeline
+- Execution Engine
+- Agent Memory System
+- Version Control
+- Workspace UI
+- Authentication & Routing
+- Testing
+- Deployment
 
 ---
 
@@ -47,15 +47,15 @@
 
 **AgenticAI Studio** is a next-gen AI-powered IDE where multiple intelligent agents collaborate to build, run, and debug code automatically.
 
-👉 You just write a prompt  
-👉 AI plans → codes → executes → debugs  
+👉 You just write a prompt
+👉 AI plans → codes → executes → debugs
 👉 You get working code in real-time
 
 ### 🤖 Agents:
 
-- **Planner Agent** → breaks idea into steps
-- **Coder Agent** → generates full code
-- **Debugger Agent** → fixes errors automatically
+- Planner Agent → breaks idea into steps
+- Coder Agent → generates full code
+- Debugger Agent → fixes errors automatically
 
 ---
 
@@ -95,17 +95,19 @@
 
 ## 🏗️ Architecture
 
+```
 React App (Frontend)
-│
-▼
+        │
+        ▼
 Supabase Edge Functions
 (planner | coder | debugger | executor)
-│
-▼
+        │
+        ▼
 Groq LLM API
-│
-▼
+        │
+        ▼
 Supabase DB (Projects + Messages)
+```
 
 ---
 
@@ -150,32 +152,34 @@ Supabase DB (Projects + Messages)
 
 ## 📂 Project Structure
 
+```
 src/
-├── components/
-│ ├── workspace/
-│ │ ├── ChatPanel.tsx
-│ │ ├── CodePanel.tsx
-│ │ ├── ConsolePanel.tsx
-│ │ ├── PlanPanel.tsx
-│ │ ├── PreviewPanel.tsx
-│ │ └── VersionPanel.tsx
-│
-├── hooks/
-│ ├── useAgentPipeline.ts
-│ ├── useAuth.tsx
-│ └── useProjects.ts
-│
-├── lib/
-│ ├── agentMemory.ts
-│ ├── agentStream.ts
-│ ├── browserExecutor.ts
-│ └── versionControl.ts
-│
-├── pages/
-│ ├── Dashboard.tsx
-│ ├── Workspace.tsx
-│ ├── Login.tsx
-│ └── Signup.tsx
+ ├── components/
+ │   ├── workspace/
+ │   │   ├── ChatPanel.tsx
+ │   │   ├── CodePanel.tsx
+ │   │   ├── ConsolePanel.tsx
+ │   │   ├── PlanPanel.tsx
+ │   │   ├── PreviewPanel.tsx
+ │   │   └── VersionPanel.tsx
+ │
+ ├── hooks/
+ │   ├── useAgentPipeline.ts
+ │   ├── useAuth.tsx
+ │   └── useProjects.ts
+ │
+ ├── lib/
+ │   ├── agentMemory.ts
+ │   ├── agentStream.ts
+ │   ├── browserExecutor.ts
+ │   └── versionControl.ts
+ │
+ ├── pages/
+ │   ├── Dashboard.tsx
+ │   ├── Workspace.tsx
+ │   ├── Login.tsx
+ │   └── Signup.tsx
+```
 
 ---
 
@@ -187,30 +191,62 @@ src/
 git clone https://github.com/your-org/agenticai-studio.git
 cd agenticai-studio
 npm install
-▶️ Run
+```
+
+### ▶️ Run
+
+```bash
 npm run dev
+```
 
-👉 http://localhost:8080
+👉 [http://localhost:8080](http://localhost:8080)
 
-🔑 Environment Variables
+---
+
+## 🔑 Environment Variables
+
+```
 VITE_SUPABASE_URL=
 VITE_SUPABASE_PUBLISHABLE_KEY=
 VITE_SUPABASE_PROJECT_ID=
-🗄️ Supabase Setup
-Run migrations:
+```
+
+---
+
+## 🗄️ Supabase Setup
+
+### Run migrations:
+
+```bash
 supabase db push
-Enable RLS:
+```
+
+### Enable RLS:
+
+```sql
 auth.uid() = user_id
-⚡ Edge Functions
-agent-planner
-agent-coder
-agent-debugger
-code-executor
+```
+
+---
+
+## ⚡ Edge Functions
+
+- agent-planner
+- agent-coder
+- agent-debugger
+- code-executor
 
 Deploy:
 
+```bash
 supabase functions deploy agent-planner
-🔄 Agent Pipeline
+```
+
+---
+
+## 🔄 Agent Pipeline
+
+```
 Prompt
   ↓
 Planner
@@ -222,29 +258,63 @@ Execute
 Debugger (if error)
   ↓
 Success ✅
-🧪 Testing
+```
+
+---
+
+## 🧪 Testing
+
+```bash
 npm run test
 npx playwright test
-🚀 Deployment
-Frontend
+```
+
+---
+
+## 🚀 Deployment
+
+### Frontend
+
+```bash
 npm run build
+```
 
 Deploy to:
 
-Vercel
-Netlify
-Backend
+- Vercel
+- Netlify
+
+### Backend
+
+```bash
 supabase functions deploy
-🔐 Authentication
-Supabase Auth
-Protected routes
-Demo mode (no login)
-📱 UI Features
-Responsive design
-Mobile tabs (Chat / Code / Preview)
-Resizable panels
-VS Code style layout
-📜 License
+```
+
+---
+
+## 🔐 Authentication
+
+- Supabase Auth
+- Protected routes
+- Demo mode (no login)
+
+---
+
+## 📱 UI Features
+
+- Responsive design
+- Mobile tabs (Chat / Code / Preview)
+- Resizable panels
+- VS Code style layout
+
+---
+
+## 📜 License
 
 Private — All rights reserved.
-```
+
+---
+
+## 👨‍💻 Developed By
+
+**Ambar Ubale 🚀**
