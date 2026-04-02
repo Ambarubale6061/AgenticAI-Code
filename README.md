@@ -8,11 +8,11 @@
 
 ### 🔥 Hero Section
 
-![Hero](src/assets/home.jpg)
+![Hero](src/assets/hero.jpg)
 
 ### 📊 Dashboard
 
-![Dashboard](src/assets/Dash.jpg)
+![Dashboard](src/assets/dashboard.jpg)
 
 ### 💻 IDE Workspace
 
@@ -65,6 +65,12 @@
 
 - No signup required
 - 1 free run per session
+
+### 🚀 Deployed App
+
+👉 [https://your-deploy-link.com](https://your-deploy-link.com)
+
+_(Replace this with your actual deployed URL — Vercel / Netlify)_
 
 ---
 
