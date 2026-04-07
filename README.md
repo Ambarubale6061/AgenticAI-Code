@@ -1,10 +1,6 @@
 <div align="center">
 
-<img src="./src/assets/ai.png"
-
-width="100"
-height="100"
-alt="AgenticAI Studio Logo" />
+<img src="./src/assets/ai.png" width="200" height="200" alt="AgenticAI Studio Logo" />
 
 # 🚀 AgenticAI Studio
 
