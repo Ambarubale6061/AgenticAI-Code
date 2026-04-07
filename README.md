@@ -1,6 +1,20 @@
-# 🚀 AgenticAI Studio
+🚀 AgenticAI Studio
 
-> A full-stack, browser-based AI coding workspace where a coordinated pipeline of agents — planner, coder, and debugger — collaborate to take a user prompt from idea to running code.
+<div < align="center">
+
+<img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='8' fill='url(%23gradient)'/%3E%3Cpath d='M12 16L20 12L28 16L20 20L12 16Z' stroke='white' stroke-width='1.5' fill='none'/%3E%3Cpath d='M20 20L20 28' stroke='white' stroke-width='1.5'/%3E%3Ccircle cx='20' cy='28' r='2' fill='white'/%3E%3Cpath d='M12 24L20 20L28 24' stroke='white' stroke-width='1.5' stroke-dasharray='2 2'/%3E%3Cdefs%3E%3ClinearGradient id='gradient' x1='0' y1='0' x2='40' y2='40' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='hsl(190 90%25 50%25)'/%3E%3Cstop offset='1' stop-color='hsl(270 70%25 60%25)'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E" width="100" height="100" alt="AgenticAI Studio Logo" />
+
+Autonomous AI Coding Workspace
+A full-stack, browser-based AI coding workspace where a coordinated pipeline of agents — planner, coder, and debugger — collaborate to take a user prompt from idea to running code.
+
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Site-blue?style=for-the-badge)](https://futurecart-e-commerce.vercel.app/)
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Supabase](https://img.shields.io/badge/Supabase-Backend-3ECF8E?style=flat-square&logo=supabase)](https://supabase.com/)
+[![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?style=flat-square&logo=vite)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
+
+</div>
 
 ---
 
@@ -8,15 +22,11 @@
 
 ### 🔥 Hero Section
 
-![Hero](src/assets/hero.jpg)
-
-### 📊 Dashboard
-
-![Dashboard](src/assets/dashboard.jpg)
+![Hero](src/assets/ho.png)
 
 ### 💻 IDE Workspace
 
-![IDE](src/assets/ide.jpg)
+![IDE](src/assets/IDE.png)
 
 ---
 
