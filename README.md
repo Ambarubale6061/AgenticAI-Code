@@ -324,12 +324,16 @@ supabase functions deploy
 
 ---
 
-## 📜 License
+## 📄 License
 
-Private — All rights reserved.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-## 👨‍💻 Developed By
+## 👨‍💻 Author
 
-**Ambar Ubale 🚀**
+**Ambar Ubale**
+
+- 💼 Full Stack Developer
+- 🌐 Portfolio: https://ambarportfolio.vercel.app/
+- 🔗 LinkedIn: https://www.linkedin.com/in/ambar-ubale-137214230
