@@ -495,28 +495,8 @@ export function useAgentPipeline(projectId?: string) {
         setActiveStepId("1");
 
         addConsole("agent", `Generated ${plan.steps.length}-step plan (${plan.language})`, "planner");
-
-        // Enhanced planner message formatting
-        // Clean summary: remove any accidental JSON wrapping
-let cleanSummary = plan.summary || "";
-if (cleanSummary.startsWith("{") && cleanSummary.includes("projectType")) {
-  // Fallback: extract a human-readable line
-  cleanSummary = `Building a ${plan.projectType || "static"} project with ${plan.language || "javascript"}.`;
-}
-
-const stepsList = plan.steps
-  .map((s, i) => `${i + 1}. **${s.title}**  \n   ${s.description || ""}`)
-  .join("\n");
-
-const planMsg = `### 📋 Plan Created
-
-**Project Type:** ${plan.projectType || "static"}  
-**Language:** ${plan.language || "javascript"}
-
-${cleanSummary}
-
-**Steps:**
-${stepsList}`;
+         
+        
 
         setMessages((prev) => [
           ...prev,
