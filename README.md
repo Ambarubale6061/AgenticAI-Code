@@ -38,11 +38,17 @@ Everything runs in one place: Monaco editor, live preview iframe, console output
 
 ### 🔥 Hero Section
 
-![Hero](src/assets/ho.png)
+![Hero](frontend\src\assets\ho.png)
 
 ### 💻 IDE Workspace
 
-![IDE](src/assets/IDE.png)
+![IDE](frontend\src\assets\IDE.png)
+
+---
+
+## 🌐 Live Demo
+
+> 🔗 [https://agentic-ai-studio-chi.vercel.app/](https://agentic-ai-studio-chi.vercel.app/)
 
 ---
 
@@ -109,31 +115,27 @@ Built with **React 18 + TypeScript** and bundled by **Vite (SWC)**. The UI is mo
 └────────────────┴────────────────┴───────────────────────────────────┴────────────┘
 ```
 
-### Key Components
+### 🚀 Key Components
 
-**`Workspace.tsx`** — The top-level IDE page. Owns the VS Code–style menu bar (File, Edit, View, Run, Terminal, Help), the Activity Bar with tooltip icons, the resizable panel layout via `react-resizable-panels`, the Command Palette (`Ctrl+P`), and all keyboard shortcuts (`Ctrl+Enter` to run, `Ctrl+B` to toggle sidebar, `Ctrl+`` ` to toggle console). Handles both desktop and mobile layouts.
+| Component            | Role                      | Description                                                                                          |
+| -------------------- | ------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **Workspace.tsx**    | 🧠 Main IDE Shell         | VS Code–style full IDE layout with menus, panels, shortcuts, and responsive workspace management.    |
+| **ChatPanel.tsx**    | 💬 AI Communication Layer | AI chat interface with Markdown support, streaming responses, and agent-based color-coded messaging. |
+| **CodePanel.tsx**    | 🧑‍💻 Code Editor Engine     | Monaco-based code editor with multi-file tabs, syntax highlighting, and run/download features.       |
+| **PreviewPanel.tsx** | 🌐 Live Output Renderer   | Real-time iframe preview that renders executed HTML, CSS, JS, and React output instantly.            |
+| **ConsolePanel.tsx** | 📟 Execution Logger       | Displays structured runtime logs with timestamps, filtering, and multi-level output tracking.        |
+| **PlanHeader.tsx**   | 📊 AI Workflow Tracker    | Visual progress tracker showing AI execution steps from pending to completion or error state.        |
+| **VersionPanel.tsx** | 🕓 Snapshot Manager       | Manages project versions using localStorage with save, restore, and delete snapshot features.        |
+| **AgentStatus.tsx**  | 🔵 AI State Indicator     | Shows real-time AI pipeline status such as idle, planning, coding, debugging, or complete.           |
 
-**`ChatPanel.tsx`** — The AI assistant interface. Renders user and agent messages with Markdown support via `react-markdown`, colour-codes each agent (Planner → green, Coder → blue, Debugger → rose), shows an animated typing indicator during streaming, and includes a clear-chat action. Sends messages on `Enter` (newline on `Shift+Enter`).
+### 🧠 Core Hooks
 
-**`CodePanel.tsx`** — Monaco Editor wrapper with per-file tabs, breadcrumbs, file-type icons, copy-to-clipboard, single-file download, and a Run button. Supports JavaScript, TypeScript, Python, HTML, CSS, JSON, and Bash with proper Monaco language IDs.
-
-**`PreviewPanel.tsx`** — Live iframe renderer. Automatically updates when new files are generated or code is executed. Receives `executionResult` and renders the output. Handles React, HTML, CSS, and plain JS previews.
-
-**`ConsolePanel.tsx`** — Execution output panel with four line types (`stdout`, `stderr`, `info`, `agent`), per-type colour coding, timestamp on every line, a filter bar, and a line count badge.
-
-**`PlanHeader.tsx`** — Horizontal scrollable step bar that sits above the editor. Each step shows a status icon (pending → in-progress → done → error) and strikes through when complete.
-
-**`VersionPanel.tsx`** — Snapshot system in the sidebar Timeline tab. Save, label, restore, and delete named versions of the current file set. Backed by `localStorage` via `versionControl.ts`.
-
-**`AgentStatus.tsx`** — Compact status indicator rendered in both the top bar and the status bar. Displays the current pipeline state: `idle`, `planning`, `coding`, `debugging`, `complete`, or `error`.
-
-### Hooks
-
-**`useAgentPipeline.ts`** — The central orchestrator. Manages all agent state, file state, console lines, and the full retry loop. Exposes handlers for file CRUD (create, rename, delete, restore snapshot), code execution, and message sending. Also persists panel sizes to `localStorage`.
-
-**`useProjects.ts`** — TanStack React Query mutations and queries for project CRUD and per-project message history. All requests attach the Supabase JWT and handle 401s with automatic redirect.
-
-**`useAuth.tsx`** — Wraps Supabase Auth. Exposes the current user, `signOut`, and session state.
+| Hook                    | Role                        | Description                                                                                                                                                                                           |
+| ----------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **useAgentPipeline.ts** | 🧩 AI Orchestrator Engine   | Central brain of system. Manages full agent pipeline flow (Planner → Coder → Debugger → Executor). Handles file state, console logs, execution flow, retry logic, and UI persistence in localStorage. |
+| **useProjects.ts**      | 📦 Project Management Layer | Handles project CRUD operations using React Query. Integrates Supabase JWT authentication, API calls, caching, and automatic session handling with 401 redirect support.                              |
+| **useAuth.tsx**         | 🔐 Authentication Layer     | Wrapper around Supabase Auth. Manages user session, login/logout state, and persistent authentication context across application.                                                                     |
+| functionality.          |
 
 ### Libraries
 
