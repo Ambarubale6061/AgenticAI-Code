@@ -42,7 +42,7 @@ Everything runs in one place: Monaco editor, live preview iframe, console output
 
 ### 💻 IDE Workspace
 
-![IDE](frontend\src\assets\IDE.png)
+![IDE](frontend/src/assets/IDE.png)
 
 ---
 
