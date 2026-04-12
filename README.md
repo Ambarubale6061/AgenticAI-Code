@@ -2,7 +2,7 @@
 
 <br />
 
-<img src="frontend/src/assets/ai.png" alt="AgenticAI Studio" width="72" />
+<img src="frontend/src/assets/ai.png" alt="AgenticAI Studio" width="100" />
 
 <h1>AgenticAI Studio</h1>
 
