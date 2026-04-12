@@ -3,7 +3,13 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
+// ─── Normalize API base URL (strip trailing slashes) ─────────────────────────
+// This ensures the URL is always correct regardless of whether the env var
+// was set with or without a trailing slash (e.g. both of these work:
+//   VITE_API_BASE_URL=https://agenticai-studio.onrender.com
+//   VITE_API_BASE_URL=https://agenticai-studio.onrender.com/
+const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/+$/, "");
+
 let isRedirecting = false;
 
 async function fetchWithAuth(endpoint: string, options: RequestInit = {}, retry = true) {
@@ -11,7 +17,9 @@ async function fetchWithAuth(endpoint: string, options: RequestInit = {}, retry 
   const token = data.session?.access_token;
   if (!token) throw new Error("Not authenticated");
 
-  const url = `${API_BASE}/api${endpoint.startsWith("/") ? "" : "/"}${endpoint}`;
+  // Build URL: ensure endpoint always starts with "/" and /api/ prefix is always present
+  const normalizedEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const url = `${API_BASE}/api${normalizedEndpoint}`;
 
   const res = await fetch(url, {
     ...options,

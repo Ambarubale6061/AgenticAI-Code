@@ -23,17 +23,26 @@ export async function streamGroqChat(
   if (!response.ok) {
     const errorText = await response.text();
     console.error("Groq API error:", response.status, errorText);
-    throw new Error(`Groq API error: ${response.status}`);
+    // At this point headers have NOT been sent yet, so json() is safe
+    if (!res.headersSent) {
+      res
+        .status(response.status)
+        .json({ error: `Groq API error: ${response.status}` });
+    }
+    return;
   }
 
-  // Set SSE headers
+  // Set SSE headers BEFORE any write so the client knows to stream
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
+  // Flush headers immediately so the client can start reading
+  res.flushHeaders();
 
-  // Node.js readable stream handling
   const stream = response.body;
+
   stream.on("data", (chunk) => {
+    // Headers are already sent at this point — res.write() is safe
     res.write(chunk);
   });
 
@@ -41,8 +50,17 @@ export async function streamGroqChat(
     res.end();
   });
 
+  // FIX: Previously called res.status(500).json() after headers were already
+  // sent (because res.flushHeaders() + res.write() had already run), which
+  // caused Express to throw "Cannot set headers after they are sent to client".
+  // Now we check headersSent and gracefully end the stream instead.
   stream.on("error", (err) => {
-    console.error("Stream error:", err);
-    res.status(500).json({ error: "Stream error" });
+    console.error("Groq stream error:", err);
+    if (!res.headersSent) {
+      res.status(500).json({ error: "Stream error: " + err.message });
+    } else {
+      // Headers already sent — can only end the response, not change status
+      res.end();
+    }
   });
 }

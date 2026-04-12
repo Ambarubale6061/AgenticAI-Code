@@ -1,7 +1,11 @@
 // src/lib/agentStream.ts
 import { supabase } from "@/integrations/supabase/client";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
+// ─── Normalize API base URL (strip trailing slashes) ─────────────────────────
+// FIX: All URLs were missing /api/ prefix — e.g. hitting /agent/planner instead
+// of /api/agent/planner, causing 404 on every single agent call.
+const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/+$/, "");
+
 let isRedirecting = false;
 
 async function handle401() {
@@ -59,7 +63,8 @@ export async function callPlannerAgent(
     throw new Error("Authentication required. Please log in.");
   }
 
-  const url = `${API_BASE}/agent/planner`;
+  // FIX: was `${API_BASE}/agent/planner` — missing /api/ prefix → 404
+  const url = `${API_BASE}/api/agent/planner`;
   console.log("[Planner] Calling:", url);
 
   try {
@@ -119,7 +124,8 @@ export async function streamAgentResponse({
     return;
   }
 
-  const url = `${API_BASE}/agent/${functionName}`;
+  // FIX: was `${API_BASE}/agent/${functionName}` — missing /api/ prefix → 404
+  const url = `${API_BASE}/api/agent/${functionName}`;
   let resp;
   try {
     resp = await fetchWithRetry(url, {
@@ -258,17 +264,13 @@ function extractJson(raw: string): unknown {
   // 5. Fix common JSON issues (trailing commas, unquoted keys, unescaped newlines)
   try {
     let fixed = raw;
-    // Remove trailing commas before } or ]
     fixed = fixed.replace(/,(\s*[}\]])/g, "$1");
-    // Quote unquoted keys
     fixed = fixed.replace(/([{,]\s*)([a-zA-Z0-9_]+)(\s*:)/g, '$1"$2"$3');
-    // Find JSON boundaries
     const jsonStart = fixed.indexOf("{");
     const jsonEnd = fixed.lastIndexOf("}");
     if (jsonStart !== -1 && jsonEnd > jsonStart) {
       fixed = fixed.slice(jsonStart, jsonEnd + 1);
     }
-    // Escape unescaped newlines in string literals
     fixed = fixed.replace(/(?<!\\)\n/g, "\\n");
     return JSON.parse(fixed);
   } catch {
@@ -312,7 +314,6 @@ export function parseCoderResponse(fullText: string): {
           typeof f.code === "string",
       )
     ) {
-      // Ensure React files get correct language
       const files = parsed.files.map((f: any) => {
         let lang = f.language;
         if (f.filename.endsWith(".jsx") || f.filename.endsWith(".tsx")) {
@@ -330,7 +331,7 @@ export function parseCoderResponse(fullText: string): {
     console.warn("[parseCoderResponse] parse failed:", e);
   }
 
-  // Fallback: treat the raw text as a single code file (best effort)
+  // Fallback: treat the raw text as a single code file
   const extension = detectLanguageFromText(fullText);
   return {
     files: [

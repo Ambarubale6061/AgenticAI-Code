@@ -28,7 +28,8 @@ import {
 } from "@/hooks/useProjects";
 import { useAuth } from "@/hooks/useAuth";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL;
+// ─── Normalize API base URL (strip trailing slashes) ─────────────────────────
+const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/+$/, "");
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type ExecutionResult = {
@@ -78,13 +79,14 @@ function isBackendLanguage(lang: string): boolean {
 }
 
 // ─── Remote execution via backend ─────────────────────────────────────────────
+// FIX: was missing /api/ prefix — caused 404 on all execute calls
 async function executeCodeRemote(
   files: Array<{ filename: string; language: string; code: string }>,
   language: string
 ): Promise<ExecutionResult> {
   const { data } = await supabase.auth.getSession();
   const token = data.session?.access_token;
-  const resp = await fetch(`${API_BASE}/agent/execute`, {
+  const resp = await fetch(`${API_BASE}/api/agent/execute`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -495,8 +497,16 @@ export function useAgentPipeline(projectId?: string) {
         setActiveStepId("1");
 
         addConsole("agent", `Generated ${plan.steps.length}-step plan (${plan.language})`, "planner");
-         
-        
+
+        // FIX: planMsg was referenced but never defined — caused ReferenceError
+        // crashing the entire pipeline on every run.
+        const planMsg = plan.summary
+          ? `**Plan:** ${plan.summary}\n\n${plan.steps
+              .map((s, i) => `${i + 1}. **${s.title}**${s.description ? `: ${s.description}` : ""}`)
+              .join("\n")}`
+          : `Here is the ${plan.steps.length}-step plan:\n\n${plan.steps
+              .map((s, i) => `${i + 1}. **${s.title}**${s.description ? `: ${s.description}` : ""}`)
+              .join("\n")}`;
 
         setMessages((prev) => [
           ...prev,
