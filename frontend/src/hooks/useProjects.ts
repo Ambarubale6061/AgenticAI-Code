@@ -11,7 +11,9 @@ async function fetchWithAuth(endpoint: string, options: RequestInit = {}, retry 
   const token = data.session?.access_token;
   if (!token) throw new Error("Not authenticated");
 
-  const res = await fetch(`${API_BASE}${endpoint}`, {
+  const url = `${API_BASE}/api${endpoint.startsWith("/") ? "" : "/"}${endpoint}`;
+
+  const res = await fetch(url, {
     ...options,
     headers: {
       ...options.headers,
