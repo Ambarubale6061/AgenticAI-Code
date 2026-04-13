@@ -2,8 +2,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
 // ─── Normalize API base URL (strip trailing slashes) ─────────────────────────
-// FIX: All URLs were missing /api/ prefix — e.g. hitting /agent/planner instead
-// of /api/agent/planner, causing 404 on every single agent call.
 const API_BASE = (import.meta.env.VITE_API_BASE_URL ?? "").replace(/\/+$/, "");
 
 let isRedirecting = false;
@@ -63,7 +61,6 @@ export async function callPlannerAgent(
     throw new Error("Authentication required. Please log in.");
   }
 
-  // FIX: was `${API_BASE}/agent/planner` — missing /api/ prefix → 404
   const url = `${API_BASE}/api/agent/planner`;
   console.log("[Planner] Calling:", url);
 
@@ -124,7 +121,6 @@ export async function streamAgentResponse({
     return;
   }
 
-  // FIX: was `${API_BASE}/agent/${functionName}` — missing /api/ prefix → 404
   const url = `${API_BASE}/api/agent/${functionName}`;
   let resp;
   try {
@@ -288,56 +284,120 @@ function extractJson(raw: string): unknown {
   throw new Error("Could not extract JSON from LLM response");
 }
 
-// Helper to guess file extension from content
+// ─── Language helpers ─────────────────────────────────────────────────────────
+
 function detectLanguageFromText(text: string): string {
   if (text.includes("<!DOCTYPE html") || text.includes("<html")) return "html";
-  if (text.includes("import React") || text.includes("React.")) return "tsx";
+  if (
+    text.includes("import React") ||
+    text.includes("React.") ||
+    /<[A-Z][A-Za-z]*[\s/>]/.test(text)
+  )
+    return "tsx";
   if (text.includes("def ") && text.includes("print(")) return "py";
   if (text.includes("function ") || text.includes("const ")) return "js";
   return "txt";
 }
 
+/** Returns true when a file's code looks like React even if language is JS/TS */
+function codeIsReact(language: string, code: string): boolean {
+  if (!["javascript", "typescript"].includes(language)) return false;
+  const hasReactApi =
+    /\b(?:useState|useEffect|useCallback|useMemo|useRef|useReducer|useContext|createContext|JSX\.Element|ReactNode)\b/.test(
+      code,
+    );
+  const hasJsx =
+    /<[A-Z][A-Za-z0-9]*[\s/>]|<\/[A-Z][A-Za-z0-9]*>|return\s*\(\s*</.test(code);
+  return hasReactApi && hasJsx;
+}
+
+/** Normalises raw language strings from the LLM into canonical values */
+function normaliseLanguage(
+  rawLang: string,
+  filename: string,
+  code: string,
+): string {
+  let lang = rawLang.toLowerCase().trim();
+
+  // Aliases
+  const aliases: Record<string, string> = {
+    jsx: "react",
+    tsx: "react",
+    js: "javascript",
+    ts: "typescript",
+    py: "python",
+    sh: "bash",
+    shell: "bash",
+    rb: "ruby",
+    rs: "rust",
+    kt: "kotlin",
+  };
+  if (aliases[lang]) lang = aliases[lang];
+
+  // Extension-based override
+  const fname = filename.toLowerCase();
+  if (fname.endsWith(".tsx") || fname.endsWith(".jsx")) lang = "react";
+  else if (fname.endsWith(".ts") && !fname.endsWith(".d.ts")) {
+    if (lang === "javascript") lang = "typescript";
+  }
+
+  // Content-based promotion: JS/TS with JSX patterns → react
+  if (codeIsReact(lang, code)) lang = "react";
+
+  return lang;
+}
+
+// ─── parseCoderResponse ───────────────────────────────────────────────────────
+// FIX: Added normaliseLanguage() so files with language:"javascript" that contain
+// React JSX are promoted to language:"react". Without this, bundleWebFiles routes
+// them to buildJsHtml (no Babel, no React CDN) → blank screen / JSX as plain text.
 export function parseCoderResponse(fullText: string): {
   files: Array<{ filename: string; language: string; code: string }>;
   explanation: string;
 } {
   try {
-    const parsed = extractJson(fullText) as any;
+    const parsed = extractJson(fullText) as Record<string, unknown>;
+
     if (
       parsed &&
       Array.isArray(parsed.files) &&
       parsed.files.length > 0 &&
-      parsed.files.every(
-        (f: any) =>
-          typeof f.filename === "string" &&
-          typeof f.language === "string" &&
-          typeof f.code === "string",
+      (parsed.files as unknown[]).every(
+        (f: unknown) =>
+          typeof (f as Record<string, unknown>).filename === "string" &&
+          typeof (f as Record<string, unknown>).language === "string" &&
+          typeof (f as Record<string, unknown>).code === "string",
       )
     ) {
-      const files = parsed.files.map((f: any) => {
-        let lang = f.language;
-        if (f.filename.endsWith(".jsx") || f.filename.endsWith(".tsx")) {
-          lang = "react";
-        }
-        return { ...f, language: lang };
-      });
+      const files = (
+        parsed.files as Array<{ filename: string; language: string; code: string }>
+      ).map((f) => ({
+        ...f,
+        language: normaliseLanguage(f.language, f.filename, f.code),
+      }));
+
       return {
         files,
-        explanation: parsed.explanation || "Code generated successfully.",
+        explanation:
+          typeof parsed.explanation === "string"
+            ? parsed.explanation
+            : "Code generated successfully.",
       };
     }
+
     console.warn("[parseCoderResponse] Unexpected shape:", parsed);
   } catch (e) {
     console.warn("[parseCoderResponse] parse failed:", e);
   }
 
-  // Fallback: treat the raw text as a single code file
+  // Fallback: treat the entire raw text as a single file
   const extension = detectLanguageFromText(fullText);
   return {
     files: [
       {
         filename: `output.${extension}`,
-        language: extension === "tsx" ? "react" : extension,
+        language:
+          extension === "tsx" || extension === "jsx" ? "react" : extension,
         code: fullText,
       },
     ],
@@ -346,6 +406,7 @@ export function parseCoderResponse(fullText: string): {
   };
 }
 
+// ─── parseDebuggerResponse ────────────────────────────────────────────────────
 export function parseDebuggerResponse(fullText: string): {
   diagnosis: string;
   fixes: Array<{ filename: string; language: string; code: string }>;
@@ -353,19 +414,36 @@ export function parseDebuggerResponse(fullText: string): {
   confidence: string;
 } {
   try {
-    const parsed = extractJson(fullText) as any;
+    const parsed = extractJson(fullText) as Record<string, unknown>;
+
     if (parsed && Array.isArray(parsed.fixes)) {
+      const fixes = (
+        parsed.fixes as Array<{ filename: string; language: string; code: string }>
+      ).map((f) => ({
+        ...f,
+        language: normaliseLanguage(f.language, f.filename, f.code),
+      }));
+
       return {
-        diagnosis: parsed.diagnosis || "See explanation below.",
-        fixes: parsed.fixes,
-        explanation: parsed.explanation || "Fix applied.",
-        confidence: parsed.confidence || "medium",
+        diagnosis:
+          typeof parsed.diagnosis === "string"
+            ? parsed.diagnosis
+            : "See explanation below.",
+        fixes,
+        explanation:
+          typeof parsed.explanation === "string"
+            ? parsed.explanation
+            : "Fix applied.",
+        confidence:
+          typeof parsed.confidence === "string" ? parsed.confidence : "medium",
       };
     }
+
     console.warn("[parseDebuggerResponse] Unexpected shape:", parsed);
   } catch (e) {
     console.warn("[parseDebuggerResponse] parse failed:", e);
   }
+
   return {
     diagnosis: fullText.slice(0, 200),
     fixes: [],

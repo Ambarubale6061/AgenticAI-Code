@@ -1,26 +1,30 @@
 <div align="center">
 
-<br />
-
 <img src="frontend/src/assets/ai.png" alt="AgenticAI Studio" width="100" />
 
-<h1>AgenticAI Studio</h1>
+# AgenticAI Studio
 
-<p>A browser-based IDE where you describe what to build and a multi-agent AI pipeline plans, codes, executes, and debugs it — automatically.</p>
+### A VS Code-inspired, multi-agent AI coding environment — in the browser.
 
-<br />
+Describe what you want to build in plain English. A pipeline of specialized AI agents plans, codes, debugs, and runs your project — live, in a browser preview.
 
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
+<br/>
+
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Vercel-000000?style=for-the-badge&logo=vercel)](https://agentic-ai-studio-chi.vercel.app/)
+[![Backend API](https://img.shields.io/badge/🖥️_Backend_API-Render-46E3B7?style=for-the-badge&logo=render)](https://agenticai-studio.onrender.com)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](./LICENSE)
+
+<br/>
+
+[![React](https://img.shields.io/badge/React_18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org)
-[![Express](https://img.shields.io/badge/Express-4-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com)
-[![MongoDB](https://img.shields.io/badge/MongoDB-8-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com)
-[![Supabase](https://img.shields.io/badge/Supabase-Auth-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com)
-[![Groq](https://img.shields.io/badge/Groq-LLaMA%203.3%2070B-F55036?style=flat-square)](https://groq.com)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](./LICENSE)
-
-<br />
+[![Express](https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com)
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com)
+[![Groq](https://img.shields.io/badge/Groq-F55036?style=flat-square&logo=groq&logoColor=white)](https://groq.com)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 
 </div>
 
@@ -28,9 +32,9 @@
 
 ## Overview
 
-AgenticAI Studio is a full-stack agentic coding assistant built around a VS Code–style interface. You type a plain-English prompt and three specialised AI agents take over — a **Planner** that structures the work, a **Coder** that writes multi-file output, and a **Debugger** that iteratively fixes execution errors without any manual input.
+**AgenticAI Studio** is a full-stack, browser-native coding environment that replaces the traditional edit-compile-run loop with a conversational AI pipeline. Instead of writing boilerplate, you describe your intent — the agents handle the rest.
 
-Everything runs in one place: Monaco editor, live preview iframe, console output, file explorer, version snapshots, and an AI chat panel — all in the browser.
+The workspace is modelled after VS Code: resizable panels, a file explorer with context menus, a command palette (`Ctrl+P`), a built-in terminal, syntax-highlighted editor via Monaco, and a live preview iframe. Under the hood, three specialized AI agents collaborate in sequence, each with a distinct role, producing runnable code that is immediately executed and displayed — with automatic retry/debug loops on failure.
 
 ---
 
@@ -46,250 +50,170 @@ Everything runs in one place: Monaco editor, live preview iframe, console output
 
 ---
 
-## 🌐 Live Demo
+## Live Deployments
 
-> 🔗 [https://agentic-ai-studio-chi.vercel.app/](https://agentic-ai-studio-chi.vercel.app/)
+| Service         | URL                                                                           | Platform |
+| --------------- | ----------------------------------------------------------------------------- | -------- |
+| **Frontend**    | [agentic-ai-studio-chi.vercel.app](https://agentic-ai-studio-chi.vercel.app/) | Vercel   |
+| **Backend API** | [agenticai-studio.onrender.com](https://agenticai-studio.onrender.com)        | Render   |
+
+> Try it without signing up — visit the demo and click **Try Demo** for one free generation.
 
 ---
 
 ## How the Agent Pipeline Works
 
+Every chat message triggers a 4-stage automated pipeline:
+
 ```
-  User Prompt
-       │
-       ▼
-  ┌─────────────────────────────────────────────────────────┐
-  │  ①  PLANNER                                             │
-  │     Reads the prompt, picks the project type and        │
-  │     language, returns a structured step-by-step plan.   │
-  └──────────────────────────┬──────────────────────────────┘
-                             │
-                             ▼
-  ┌─────────────────────────────────────────────────────────┐
-  │  ②  CODER                                               │
-  │     Streams a complete, multi-file codebase from        │
-  │     the plan via Server-Sent Events.                    │
-  └──────────────────────────┬──────────────────────────────┘
-                             │
-                             ▼
-  ┌─────────────────────────────────────────────────────────┐
-  │  ③  EXECUTOR                                            │
-  │     Web languages → sandboxed iframe in the browser.   │
-  │     Backend languages → remote execution via Express.  │
-  └────────┬───────────────────────────────────────────────-┘
-           │
-           ├──  ✅  Exit code 0 → Pipeline complete
-           │
-           └──  ❌  Error detected → auto-retry (max 3×)
-                          │
-                          ▼
-                    ④  DEBUGGER
-                       Injects agent memory of past fixes,
-                       diagnoses the root cause, streams
-                       corrected files, then re-executes.
+User Prompt
+     │
+     ▼
+┌─────────────┐      JSON Plan
+│  🗺️ Planner  │ ──────────────────►  Structured 3-7 step plan
+│   Agent     │                       + language detection
+└─────────────┘                       + project type (static/react/node)
+     │
+     ▼
+┌─────────────┐    Streaming SSE
+│  💻 Coder   │ ──────────────────►  Complete, runnable files
+│   Agent     │                       Multi-file JSON payload
+└─────────────┘                       (React, HTML/CSS/JS, Python, etc.)
+     │
+     ▼
+┌──────────────────┐
+│  🖥️ Browser       │  Web langs → executes inside a sandboxed iframe
+│  Executor /      │  Backend langs → simulated via LLM (Groq)
+│  Remote Executor │
+└──────────────────┘
+     │
+     ├──── exitCode 0 → ✅ Pipeline complete, preview rendered
+     │
+     └──── exitCode 1 → up to 3 automatic retries via:
+                ▼
+          ┌──────────────┐    Streaming SSE
+          │  🐛 Debugger  │ ──► Diagnosis + full corrected files
+          │   Agent      │     Confidence rating (high/medium/low)
+          └──────────────┘
+                │
+                └── Re-execute → repeat until success or max retries
 ```
 
-| Agent    | Model                     | Streaming | Route                      |
-| -------- | ------------------------- | --------- | -------------------------- |
-| Planner  | `llama-3.3-70b-versatile` | No        | `POST /api/agent/planner`  |
-| Coder    | `llama-3.3-70b-versatile` | Yes (SSE) | `POST /api/agent/coder`    |
-| Debugger | `llama-3.3-70b-versatile` | Yes (SSE) | `POST /api/agent/debugger` |
-| Executor | `llama-3.1-8b-instant`    | No        | `POST /api/agent/execute`  |
+The pipeline supports **abort at any point** (sends an `AbortController` signal through the chain), and the entire conversation history is persisted to MongoDB via the backend API.
 
 ---
 
-## Frontend
+## Features
 
-Built with **React 18 + TypeScript** and bundled by **Vite (SWC)**. The UI is modelled closely on VS Code with resizable panels, a full activity bar, and a status bar.
+### AI Agents
 
-### Interface Layout
+- **Planner** — Breaks prompts into structured 3–7 step plans with language and project type detection.
+- **Coder** — Generates complete, multi-file projects using Llama 3.3 70B via Groq. Streams output as SSE.
+- **Debugger** — Analyzes runtime errors, rewrites affected files, and rates fix confidence (high / medium / low). Caches successful fix patterns to avoid repeating mistakes.
+- **Auto-retry** — Up to 3 debug cycles with zero user intervention.
 
-```
-┌─ Activity Bar ─┬─── Sidebar ────┬──────── Editor + Preview ────────┬─── Chat ───┐
-│                │                │                                   │            │
-│  Explorer      │  File Tree     │  Monaco Editor   │  Live Preview  │  AI Chat   │
-│  Search        │  Search        │                  │  (iframe)      │  Panel     │
-│  Git           │  Versions      ├──────────────────┴────────────────│            │
-│  Run           │                │  Console / Terminal                │            │
-│  Extensions    │                │                                   │            │
-└────────────────┴────────────────┴───────────────────────────────────┴────────────┘
-```
+### Browser Execution Engine
 
-### 🚀 Key Components
+- **React** — Bundled with React 18 + Babel Standalone in a sandboxed iframe. A global shim exposes all hooks so stripped imports never cause runtime errors.
+- **HTML / CSS / JS** — Multi-file projects are inlined and bridged via `postMessage` for console capture.
+- **TypeScript** — Transpiled via Babel Standalone in the iframe.
+- **Python / Java / Node.js** — Simulated via a dedicated LLM executor (Groq `llama-3.1-8b-instant`).
+- **Smart language detection** — Correctly routes React code inside `.js`/`.ts` files to the React builder.
 
-| Component            | Role                      | Description                                                                                          |
-| -------------------- | ------------------------- | ---------------------------------------------------------------------------------------------------- |
-| **Workspace.tsx**    | 🧠 Main IDE Shell         | VS Code–style full IDE layout with menus, panels, shortcuts, and responsive workspace management.    |
-| **ChatPanel.tsx**    | 💬 AI Communication Layer | AI chat interface with Markdown support, streaming responses, and agent-based color-coded messaging. |
-| **CodePanel.tsx**    | 🧑‍💻 Code Editor Engine     | Monaco-based code editor with multi-file tabs, syntax highlighting, and run/download features.       |
-| **PreviewPanel.tsx** | 🌐 Live Output Renderer   | Real-time iframe preview that renders executed HTML, CSS, JS, and React output instantly.            |
-| **ConsolePanel.tsx** | 📟 Execution Logger       | Displays structured runtime logs with timestamps, filtering, and multi-level output tracking.        |
-| **PlanHeader.tsx**   | 📊 AI Workflow Tracker    | Visual progress tracker showing AI execution steps from pending to completion or error state.        |
-| **VersionPanel.tsx** | 🕓 Snapshot Manager       | Manages project versions using localStorage with save, restore, and delete snapshot features.        |
-| **AgentStatus.tsx**  | 🔵 AI State Indicator     | Shows real-time AI pipeline status such as idle, planning, coding, debugging, or complete.           |
+### VS Code-Inspired Workspace
 
-### 🧠 Core Hooks
+- Resizable panels (editor, preview, console) with sizes persisted to `localStorage`.
+- File Explorer with tree view, expand/collapse folders, and right-click context menus.
+- Monaco Editor with syntax highlighting for all supported languages.
+- Command Palette (`Ctrl+P`) for file navigation and commands.
+- Built-in terminal, VS Code-style menu bar, and full keyboard shortcut support.
+- Status bar showing branch, project ID, cursor position, and live agent state.
 
-| Hook                    | Role                        | Description                                                                                                                                                                                           |
-| ----------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **useAgentPipeline.ts** | 🧩 AI Orchestrator Engine   | Central brain of system. Manages full agent pipeline flow (Planner → Coder → Debugger → Executor). Handles file state, console logs, execution flow, retry logic, and UI persistence in localStorage. |
-| **useProjects.ts**      | 📦 Project Management Layer | Handles project CRUD operations using React Query. Integrates Supabase JWT authentication, API calls, caching, and automatic session handling with 401 redirect support.                              |
-| **useAuth.tsx**         | 🔐 Authentication Layer     | Wrapper around Supabase Auth. Manages user session, login/logout state, and persistent authentication context across application.                                                                     |
-| functionality.          |
+### Project Management
 
-### Libraries
-
-| Purpose            | Library                              |
-| ------------------ | ------------------------------------ |
-| UI components      | shadcn/ui (50+ Radix UI primitives)  |
-| Styling            | Tailwind CSS + `tailwindcss-animate` |
-| Code editor        | `@monaco-editor/react`               |
-| Resizable panels   | `react-resizable-panels`             |
-| Server state       | TanStack React Query v5              |
-| Routing            | React Router v6                      |
-| Markdown rendering | `react-markdown`                     |
-| Notifications      | Sonner                               |
-| Date formatting    | `date-fns`                           |
-| Animation          | Framer Motion                        |
-| Auth client        | `@supabase/supabase-js`              |
-
-### Code Execution — Browser Sandbox
-
-Web-language files never leave the browser. `browserExecutor.ts` writes a purpose-built HTML document into a hidden `<iframe sandbox="allow-scripts">` and captures output through a `postMessage` bridge.
-
-- **React / JSX / TSX** — Babel Standalone + React 18 UMD loaded from unpkg. Multi-file projects are concatenated and compiled in a single Babel pass. The `App` component is auto-mounted to `#root`.
-- **TypeScript** — Babel Standalone with the TypeScript preset; output rendered in a console-style view.
-- **JavaScript** — Injected directly into a sandboxed script tag.
-- **HTML** — Sanitised to strip local `src=` and module imports, then injected with the console bridge.
-- **CSS** — Rendered against a sample DOM (heading, paragraph, button, card) so styles are immediately visible.
-
-Backend languages (Python, Node.js, Go, Rust, Java, Ruby, C, C++, Bash, etc.) are detected by file extension and content patterns then routed to `POST /api/agent/execute` on the Express server.
-
-### Agent Memory
-
-`agentMemory.ts` stores error/fix pairs in `localStorage` (up to 50 entries). Before each debug attempt, the debugger searches for past fixes with a matching error pattern and language, then injects the results into the system prompt — helping the model avoid previously failed approaches.
+- **Auth via Supabase** — Email/password and OAuth. The backend verifies JWTs via JWKS (RS256) with HS256 fallback.
+- **Demo mode** — One free generation at `/workspace/demo`, no signup required.
+- **Project CRUD** — Create, rename, duplicate, export, and delete. All data in MongoDB.
+- **Message history** — Chat messages persist across sessions, hydrated on mount.
+- **Version snapshots** — Restore previous file states from the versions panel.
 
 ---
 
-## Backend
+## Tech Stack
 
-A **Node.js (ESM) + Express 4** REST API. All routes require a valid Supabase JWT in the `Authorization` header, verified on every request by `authMiddleware.js`.
+### Frontend
 
-### Server Entry — `server.js`
+| Layer         | Technology               |
+| ------------- | ------------------------ |
+| Framework     | React 18 + TypeScript    |
+| Build Tool    | Vite 5                   |
+| Styling       | Tailwind CSS + shadcn/ui |
+| Editor        | Monaco Editor            |
+| Routing       | React Router v6          |
+| Data Fetching | TanStack Query v5        |
+| Auth Client   | Supabase JS (auth only)  |
 
-Loads and validates environment variables before importing anything else. Exits immediately with a clear error if any required variable is missing. Connects to MongoDB, mounts routers, and attaches the global error handler.
+### Backend
 
-### Routes
-
-| Method   | Path                         | Description                                     |
-| -------- | ---------------------------- | ----------------------------------------------- |
-| `POST`   | `/api/agent/planner`         | Returns a structured plan as JSON               |
-| `POST`   | `/api/agent/coder`           | Streams generated files via SSE                 |
-| `POST`   | `/api/agent/debugger`        | Streams corrected files via SSE                 |
-| `POST`   | `/api/agent/execute`         | Simulates code execution, returns stdout/stderr |
-| `GET`    | `/api/projects`              | List all projects for the authenticated user    |
-| `POST`   | `/api/projects`              | Create a new project                            |
-| `GET`    | `/api/projects/:id`          | Fetch a single project                          |
-| `PUT`    | `/api/projects/:id`          | Update project title, description, code, plan   |
-| `DELETE` | `/api/projects/:id`          | Delete a project                                |
-| `GET`    | `/api/projects/:id/messages` | Fetch chat history for a project                |
-| `POST`   | `/api/projects/messages`     | Save a new chat message                         |
-
-### Agent Controller — `agentController.js`
-
-Defines system prompts for all four agents and calls the Groq API directly via `node-fetch`. Each prompt enforces a strict JSON output schema. A `repairJson` helper strips markdown fences, fixes trailing commas, quotes unquoted keys, and escapes bare newlines before parsing — handling the most common LLM formatting issues.
-
-- **Planner** — Non-streaming. Returns `{ projectType, steps[], language, summary }`.
-- **Coder** — Streaming. Pipes the Groq SSE response directly to the Express response stream via `groqService.js`.
-- **Debugger** — Streaming. Same pipe pattern. Accepts the current files, the error output, and a retry count.
-- **Executor** — Non-streaming. Uses the faster `llama-3.1-8b-instant` model to simulate execution and return `{ stdout, stderr, exitCode, executionTime }`.
-
-### Groq Service — `groqService.js`
-
-Sets SSE headers (`Content-Type: text/event-stream`, `Cache-Control: no-cache`, `Connection: keep-alive`) and pipes the Node.js readable stream from the Groq API directly to the Express response — zero buffering, zero latency overhead.
-
-### Database Models
-
-| Model         | Key Fields                                                                                             |
-| ------------- | ------------------------------------------------------------------------------------------------------ |
-| `Project`     | `userId`, `title`, `description`, `language`, `status`, `plan[]`, `generatedCode[]`, `consoleOutput[]` |
-| `Message`     | `projectId`, `role`, `agent`, `content`, `createdAt`                                                   |
-| `User`        | `supabaseId`, `email`, `fullName`                                                                      |
-| `AgentMemory` | `userId`, `errorPattern`, `fix`, `language`, `confidence`                                              |
-| `Version`     | `projectId`, `label`, `files[]`, `createdAt`                                                           |
-
-### Auth — `authMiddleware.js`
-
-Verifies the Bearer JWT from Supabase on every protected route. Uses `jwks-rsa` to fetch Supabase's public keys and `jsonwebtoken` to validate the signature and expiry. Attaches the decoded user to `req.user`.
+| Layer             | Technology                                                   |
+| ----------------- | ------------------------------------------------------------ |
+| Runtime           | Node.js (ESM)                                                |
+| Framework         | Express 4                                                    |
+| Database          | MongoDB via Mongoose 8                                       |
+| Auth Verification | JWT — RS256/ES256 via JWKS, HS256 fallback                   |
+| AI Gateway        | Groq API (`llama-3.3-70b-versatile`, `llama-3.1-8b-instant`) |
+| Streaming         | Node.js HTTP streams → SSE                                   |
 
 ---
 
 ## Project Structure
 
 ```
-agenticai-studio/
-│
+AgenticAI Code/
 ├── backend/
 │   ├── config/
-│   │   ├── db.js                    # MongoDB connection via Mongoose
-│   │   └── env.js                   # Env validation + named exports
+│   │   ├── db.js                   # MongoDB connection
+│   │   └── env.js                  # Env validation — exits on missing vars
 │   ├── controllers/
-│   │   ├── agentController.js       # All four agent endpoints
-│   │   ├── projectController.js     # Project CRUD
-│   │   └── versionController.js     # Version history
+│   │   ├── agentController.js      # Planner, Coder, Debugger, Executor
+│   │   ├── projectController.js    # Project CRUD
+│   │   ├── userController.js       # User profiles
+│   │   └── versionController.js    # Snapshot save/restore
 │   ├── middleware/
-│   │   ├── authMiddleware.js        # Supabase JWT verification
-│   │   └── errorMiddleware.js       # Global error handler
+│   │   ├── authMiddleware.js       # JWT verification (RS256 JWKS + HS256)
+│   │   └── errorMiddleware.js      # Global error handler
 │   ├── models/
-│   │   ├── AgentMemory.js
-│   │   ├── Message.js
-│   │   ├── Project.js
-│   │   ├── User.js
-│   │   └── Version.js
-│   ├── routes/
-│   │   ├── agentRoutes.js
-│   │   ├── projectRoutes.js
-│   │   └── versionRoutes.js
+│   │   ├── AgentMemory.js          # Error→fix pattern store
+│   │   ├── Message.js              # Chat message persistence
+│   │   ├── Project.js              # Project metadata + generated code
+│   │   ├── User.js                 # Auth-linked user record
+│   │   └── Version.js              # File snapshot model
 │   ├── services/
-│   │   └── groqService.js           # SSE stream pipe to Express response
-│   ├── utils/
-│   │   └── jwt.js
-│   └── server.js                    # Entry point
+│   │   └── groqService.js          # SSE streaming helper for Groq
+│   └── server.js                   # Express entry point
 │
 └── frontend/
-    ├── src/
-    │   ├── components/
-    │   │   ├── ui/                  # 50+ shadcn/ui primitives
-    │   │   └── workspace/
-    │   │       ├── AgentStatus.tsx
-    │   │       ├── ChatPanel.tsx
-    │   │       ├── CodePanel.tsx
-    │   │       ├── ConsolePanel.tsx
-    │   │       ├── FileManager.tsx
-    │   │       ├── PanelHeader.tsx
-    │   │       ├── PlanHeader.tsx
-    │   │       ├── PlanPanel.tsx
-    │   │       ├── PreviewPanel.tsx
-    │   │       └── VersionPanel.tsx
-    │   ├── hooks/
-    │   │   ├── useAgentPipeline.ts  # Core pipeline orchestrator
-    │   │   ├── useAuth.tsx
-    │   │   └── useProjects.ts       # React Query CRUD + messages
-    │   ├── lib/
-    │   │   ├── agentMemory.ts       # Error/fix memory (localStorage)
-    │   │   ├── agentStream.ts       # SSE client + JSON extraction
-    │   │   ├── browserExecutor.ts   # iframe sandbox execution
-    │   │   ├── supabaseStorage.ts
-    │   │   ├── utils.ts
-    │   │   └── versionControl.ts    # Snapshot persistence
-    │   └── pages/
-    │       ├── Dashboard.tsx        # Project list + profile card
-    │       ├── Index.tsx            # Landing page
-    │       ├── Login.tsx
-    │       ├── Signup.tsx
-    │       └── Workspace.tsx        # Full IDE
-    └── supabase/
-        └── migrations/              # Database schema
+    └── src/
+        ├── components/workspace/
+        │   ├── AgentStatus.tsx      # Live pipeline state indicator
+        │   ├── ChatPanel.tsx        # Conversation UI
+        │   ├── CodePanel.tsx        # Monaco editor wrapper
+        │   ├── ConsolePanel.tsx     # Stdout/stderr viewer
+        │   ├── PreviewPanel.tsx     # Sandboxed iframe renderer
+        │   ├── PlanPanel.tsx        # Step-by-step plan progress
+        │   └── VersionPanel.tsx     # Snapshot history browser
+        ├── hooks/
+        │   ├── useAgentPipeline.ts  # ★ Core pipeline orchestration
+        │   ├── useAuth.tsx          # Auth context (Supabase)
+        │   └── useProjects.ts       # TanStack Query wrappers
+        ├── lib/
+        │   ├── agentMemory.ts       # Local error→fix pattern cache
+        │   ├── agentStream.ts       # ★ SSE streaming + JSON parsing
+        │   └── browserExecutor.ts   # ★ iframe bundler & execution engine
+        └── pages/
+            ├── Workspace.tsx        # Full IDE layout
+            ├── Dashboard.tsx        # Project list + CRUD
+            └── Index.tsx            # Landing page
 ```
 
 ---
@@ -298,10 +222,10 @@ agenticai-studio/
 
 ### Prerequisites
 
-- Node.js 18+
-- MongoDB — local or [MongoDB Atlas](https://www.mongodb.com/atlas)
-- [Groq API key](https://console.groq.com) (free tier available)
-- [Supabase project](https://supabase.com) (used for auth only — free tier available)
+- **Node.js** v18+
+- **MongoDB** — local or [Atlas](https://www.mongodb.com/cloud/atlas)
+- **Supabase** project — [supabase.com](https://supabase.com) (auth only)
+- **Groq API key** — [console.groq.com](https://console.groq.com)
 
 ### Environment Variables
 
@@ -309,62 +233,120 @@ agenticai-studio/
 
 ```env
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/agenticai
-GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-SUPABASE_URL=https://<your-project-ref>.supabase.co
+MONGO_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/agenticai
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_JWT_SECRET=your-supabase-jwt-secret   # HS256 tokens only
+GROQ_API_KEY=gsk_...
+FRONTEND_URL=http://localhost:5173
 ```
 
-**`frontend/.env`**
+**`frontend/.env.local`**
 
 ```env
-VITE_API_BASE_URL=http://localhost:5000/api
-VITE_SUPABASE_URL=https://<your-project-ref>.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJ...
+VITE_API_BASE_URL=http://localhost:5000
 ```
 
-### Install & Run
+### Running Locally
 
 ```bash
-# Backend
-cd backend
-npm install
-npm run dev          # nodemon — http://localhost:5000
+# 1. Clone
+git clone https://github.com/your-username/AgenticAI.git && cd AgenticAI
 
-# Frontend
-cd frontend
-npm install
-npm run dev          # Vite — http://localhost:8080
+# 2. Backend
+cd backend && npm install && npm run dev
+
+# 3. Frontend (new terminal)
+cd frontend && npm install && npm run dev
 ```
 
-### Supabase Auth Setup
-
-1. Create a Supabase project and copy the URL and anon key into `frontend/.env`.
-2. In the Supabase dashboard → **Authentication → URL Configuration**, add `http://localhost:8080` to Allowed Origins.
-3. Run the database migration:
-
-```bash
-cd frontend
-supabase db push
-```
+App runs at **http://localhost:5173**.
 
 ---
 
-## Demo Mode
+## Architecture
 
-Navigate to `/workspace/demo` — no account required. Demo users get one full agent pipeline run tracked via `localStorage`. Further runs show a signup prompt.
+### Request Flow
+
+```
+Browser
+  │  1. User sends message
+  ▼
+useAgentPipeline.ts
+  │  2. POST /api/agent/planner  → JSON plan
+  │  3. POST /api/agent/coder    → SSE stream → parsed files
+  │  4. browserExecutor          → iframe (web) or /api/agent/execute (backend langs)
+  │  5. exitCode 1               → POST /api/agent/debugger → fixed files → re-execute
+  ▼
+MongoDB ← project state + messages persisted after each run
+```
+
+### Authentication Flow
+
+```
+Supabase (email / OAuth)
+  │  Issues JWT
+  ▼
+Frontend: Authorization: Bearer <token>
+  │
+  ▼
+authMiddleware.js
+  ├── RS256 / ES256 → verified via JWKS endpoint
+  └── HS256         → verified with SUPABASE_JWT_SECRET
+```
+
+### MongoDB Collections
+
+| Collection      | Key Fields                                                             |
+| --------------- | ---------------------------------------------------------------------- |
+| `projects`      | `user_id`, `title`, `language`, `status`, `plan[]`, `generated_code[]` |
+| `messages`      | `project_id`, `user_id`, `role`, `agent`, `content`                    |
+| `agentmemories` | `errorPattern`, `fix`, `language`, `confidence`                        |
+| `users`         | `supabase_id`, `email`, `name`, `avatar_url`                           |
 
 ---
 
-## Testing
+## API Reference
 
-```bash
-cd frontend
+All endpoints require `Authorization: Bearer <token>`.
 
-npm run test           # Vitest — unit + component tests
-npm run test:watch     # watch mode
+### Agent
 
-npx playwright test    # end-to-end tests
-```
+| Method | Path                  | Body                                  | Response                                      |
+| ------ | --------------------- | ------------------------------------- | --------------------------------------------- |
+| `POST` | `/api/agent/planner`  | `{ prompt }`                          | `{ steps, language, projectType, summary }`   |
+| `POST` | `/api/agent/coder`    | `{ plan, prompt, language }`          | SSE → `{ files, explanation }`                |
+| `POST` | `/api/agent/debugger` | `{ code, error, prompt, retryCount }` | SSE → `{ diagnosis, fixes, confidence }`      |
+| `POST` | `/api/agent/execute`  | `{ files, language }`                 | `{ stdout, stderr, exitCode, executionTime }` |
+
+### Projects
+
+| Method   | Path                         | Description          |
+| -------- | ---------------------------- | -------------------- |
+| `GET`    | `/api/projects`              | List user's projects |
+| `POST`   | `/api/projects`              | Create a project     |
+| `PUT`    | `/api/projects/:id`          | Update project       |
+| `DELETE` | `/api/projects/:id`          | Delete project       |
+| `GET`    | `/api/projects/:id/messages` | Get chat history     |
+| `POST`   | `/api/projects/:id/messages` | Save a message       |
+| `GET`    | `/health`                    | Health check         |
+
+---
+
+## Contributing
+
+1. Fork and branch: `git checkout -b feat/your-feature`
+2. Make changes and verify tests pass: `npm test`
+3. Commit: `git commit -m "feat: add X"`
+4. Open a Pull Request.
+
+**Key files:**
+
+- `useAgentPipeline.ts` — pipeline orchestration
+- `browserExecutor.ts` — iframe bundling and execution
+- `agentStream.ts` — SSE streaming and JSON parsing
+- `agentController.js` — backend agent handlers
 
 ---
 
